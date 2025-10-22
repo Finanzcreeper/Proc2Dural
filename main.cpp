@@ -47,7 +47,7 @@ void init_map(int w, int h, std::vector<std::vector<tile *>> &map) {
 	}
 	x = 0;
 	y = 0;
-	//fill map wiht tiles
+	//fill map with tiles
 	while (x < w) {
 		while (y < h) {
 			map[x][y] = new tile();
