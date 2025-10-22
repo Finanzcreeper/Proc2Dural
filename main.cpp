@@ -39,6 +39,7 @@ int main(int argc, char* argv[]) {
 void init_map(int w, int h, std::vector<std::vector<tile *>> &map) {
 	int x = 0;
 	int y = 0;
+	// fit map to selected size
 	map.resize(w);
 	while (x < w) {
 		map[x].resize(h);
@@ -46,9 +47,20 @@ void init_map(int w, int h, std::vector<std::vector<tile *>> &map) {
 	}
 	x = 0;
 	y = 0;
+	//fill map wiht tiles
 	while (x < w) {
 		while (y < h) {
-				map[x][y] = new tile();
+			map[x][y] = new tile();
+			++y;
+		}
+		y = 0;
+		++x;
+	}
+	x = 0;
+	y = 0;
+	//connect tiles with each other
+	while (x < w) {
+		while (y < h) {
 				if (y > 0) {
 					map[x][y]->up = map[x][y-1];
 				} else {
