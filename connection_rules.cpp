@@ -47,7 +47,6 @@ void connect_edge(tile* _tile){
 }
 
 void plain_rules(tile _tile) {
-	std::mt19937 rng = create_rng();
 	std::vector<tiletype> allowed {PLAIN, RIVER, FOREST, ROAD};
 	int i = 0;
 	while (i < _tile.directions.size()) {
@@ -55,7 +54,7 @@ void plain_rules(tile _tile) {
 			++i;
 			continue;
 		}
-		int next_tile = flat_int_random(rng, 0, allowed.size() - 1);
+		int next_tile = flat_int_random(global_rng, 0, allowed.size() - 1);
 		_tile.directions[i]->name = allowed[next_tile];
 
 		if (allowed[next_tile] == ROAD) {
@@ -69,7 +68,6 @@ void plain_rules(tile _tile) {
 }
 
 void river_rules(tile _tile) {
-	std::mt19937 rng = create_rng();
 	std::vector<tiletype> allowed {PLAIN, RIVER, FOREST};
 	int i = 0;
 	while (i < _tile.directions.size()) {
@@ -77,7 +75,7 @@ void river_rules(tile _tile) {
 			++i;
 			continue;
 		}
-		int next_tile = flat_int_random(rng, 0, allowed.size() - 1);
+		int next_tile = flat_int_random(global_rng, 0, allowed.size() - 1);
 		_tile.directions[i]->name = allowed[next_tile];
 
 		if (allowed[next_tile] == RIVER) {
@@ -88,7 +86,6 @@ void river_rules(tile _tile) {
 }
 
 void forest_rules(tile _tile) {
-	std::mt19937 rng = create_rng();
 	std::vector<tiletype> allowed {PLAIN, FOREST};
 	int i = 0;
 	while (i < _tile.directions.size()) {
@@ -96,14 +93,13 @@ void forest_rules(tile _tile) {
 			++i;
 			continue;
 		}
-		int next_tile = flat_int_random(rng, 0, allowed.size() - 1);
+		int next_tile = flat_int_random(global_rng, 0, allowed.size() - 1);
 		_tile.directions[i]->name = allowed[next_tile];
 		++i;
 	}
 }
 
 void road_rules(tile _tile) {
-	std::mt19937 rng = create_rng();
 	std::vector<tiletype> allowed {PLAIN, FOREST, ROAD};
 	int i = 0;
 	while (i < _tile.directions.size()) {
@@ -111,7 +107,7 @@ void road_rules(tile _tile) {
 			++i;
 			continue;
 		}
-		int next_tile = flat_int_random(rng, 0, allowed.size() - 1);
+		int next_tile = flat_int_random(global_rng, 0, allowed.size() - 1);
 		_tile.directions[i]->name = allowed[next_tile];
 
 		if (allowed[next_tile] == ROAD) {

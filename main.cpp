@@ -1,8 +1,11 @@
+
 #include "tile.hpp"
 #include <iostream>
 
 void print_map(int w, int h, std::vector<std::vector<tile *>> map);
 void init_map(int w, int h, std::vector<std::vector<tile *>> &map);
+
+std::mt19937 global_rng = create_rng();
 
 int main(int argc, char* argv[]) {
 	int Xmax = 0;
@@ -17,7 +20,6 @@ int main(int argc, char* argv[]) {
 	}
 	std::vector<std::vector<tile *>> map = {};
 	std::vector<tiletype> tileset;
-	std::mt19937 rng = create_rng();
 	int x = 0;
 	int y = 0;
 		
@@ -25,11 +27,11 @@ int main(int argc, char* argv[]) {
 	fill_tileset(tileset);
 	init_map(Xmax, Ymax, map);
 
-	x = flat_int_random(rng, 0, Xmax - 1);
-	y = flat_int_random(rng, 0, Ymax - 1);
+	x = flat_int_random(global_rng, 0, Xmax - 1);
+	y = flat_int_random(global_rng, 0, Ymax - 1);
 	std::cout << "starting at x:" << x << " y:" << y << std::endl;
 
-	int t =  flat_int_random(rng, 0, tileset.size() - 1);
+	int t =  flat_int_random(global_rng, 0, tileset.size() - 1);
 	tiletype a = tileset[t];
 	map[x][y]->name = a;
 	map[x][y]->generate_connections();
