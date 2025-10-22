@@ -1,8 +1,8 @@
 #include "tile.hpp"
 #include <iostream>
 
-void print_map(int w, int h, std::vector<std::vector<tile>> map);
-void init_map(int w, int h, std::vector<std::vector<tile>> &map);
+void print_map(int w, int h, std::vector<std::vector<tile *>> map);
+void init_map(int w, int h, std::vector<std::vector<tile *>> &map);
 
 int main(int argc, char* argv[]) {
 	int Xmax = 0;
@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 		Xmax = std::stoi(argv[1]);
 		Ymax = std::stoi(argv[2]);
 	}
-	std::vector<std::vector<tile>> map = {};
+	std::vector<std::vector<tile *>> map = {};
 	std::vector<tiletype> tileset;
 	std::mt19937 rng = create_rng();
 	int x = 0;
@@ -31,12 +31,12 @@ int main(int argc, char* argv[]) {
 
 	int t =  flat_int_random(rng, 0, tileset.size() - 1);
 	tiletype a = tileset[t];
-	map[x][y].name = a;
-	map[x][y].generate_connections();
+	map[x][y]->name = a;
+	map[x][y]->generate_connections();
 	print_map(Xmax, Ymax, map);
 }
 
-void init_map(int w, int h, std::vector<std::vector<tile>> &map) {
+void init_map(int w, int h, std::vector<std::vector<tile *>> &map) {
 	int x = 0;
 	int y = 0;
 	map.resize(w);
@@ -48,28 +48,28 @@ void init_map(int w, int h, std::vector<std::vector<tile>> &map) {
 	y = 0;
 	while (x < w) {
 		while (y < h) {
-				map[x][y] = tile();
+				map[x][y] = new tile();
 				if (y > 0) {
-					map[x][y].up = &map[x][y-1];
+					map[x][y]->up = map[x][y-1];
 				} else {
-					map[x][y].up = NULL;
+					map[x][y]->up = NULL;
 				}
 				if (y < h - 1) {
-					map[x][y].down = &map[x][y+1];
+					map[x][y]->down = map[x][y+1];
 				} else {
-					map[x][y].down = NULL;
+					map[x][y]->down = NULL;
 				}
 				if (x > 0) {
-					map[x][y].left = &map[x-1][y];
+					map[x][y]->left = map[x-1][y];
 				} else {
-					map[x][y].left = NULL;
+					map[x][y]->left = NULL;
 				}
 				if (x < w - 1) {
-					map[x][y].right = &map[x+1][y];
+					map[x][y]->right = map[x+1][y];
 				} else {
-					map[x][y].right = NULL;
+					map[x][y]->right = NULL;
 				}
-				map[x][y].fill_directions();
+				map[x][y]->fill_directions();
 			++y;
 		}
 		y = 0;
@@ -77,12 +77,12 @@ void init_map(int w, int h, std::vector<std::vector<tile>> &map) {
 	}
 }
 
-void print_map(int w, int h, std::vector<std::vector<tile>> map) {
+void print_map(int w, int h, std::vector<std::vector<tile *>> map) {
 	int x = 0;
 	int y = 0;
 	while (x < w) {
 		while (y < h) {
-			switch (map[x][y].name) {
+			switch (map[x][y]->name) {
 			case NONE:
 				std::cout << " NONE ";
 				break;
