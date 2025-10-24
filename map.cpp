@@ -41,32 +41,35 @@ Map::~Map(){
 }
 
 void Map::discover_tile_types(){
-	std::queue<tile*> creation_order = this->create_tile_creation_order();
-	tile* current;
+	std::vector<tile*> creation_order = this->create_tile_creation_order();
+	std::vector<tile*>::iterator current;
 	std::vector<tiletype> tileset;
 	fill_tileset(tileset);
-	std::cout << "tiles discovery setup done" << std::endl;
 
-	current = creation_order.front();
-	current->name = tileset[flat_int_random(global_rng, 0, tileset.size() - 1)];
-	std::cout << "first tile discovered" << std::endl;
-	link_tiles(*current);
-	std::cout << "first tile linked" << std::endl;
-	creation_order.pop();
-	std::cout << "discovering new tiles" << std::endl;
-	while (creation_order.empty() == false){
-		current = creation_order.front();
-		link_tiles(*current);
-		creation_order.pop();
+	std::cout << "creation order size: " << creation_order.size() << std::endl;
+	current = creation_order.begin();
+	(*current)->name = tileset[flat_int_random(global_rng, 0, tileset.size() - 1)];
+	while (current != creation_order.end()){
+		link_tiles(**current);
+		current++;
 	}
 }
 
-std::queue<tile*> Map::create_tile_creation_order(){
+std::vector<tile*> Map::create_tile_creation_order(){
 	int start_x = flat_int_random(global_rng, 0, this->width - 1);
 	int start_y = flat_int_random(global_rng, 0, this->height - 1);
-	std::queue<tile*> creation_order = {};
-	std::cout << "tile creation order setup done" << std::endl;
-	this->map[start_x][start_y]->add_to_queue(&creation_order);
+	std::vector<tile*> creation_order = {};
+	unsigned long i = 0;
+
+	creation_order.push_back(this->map[start_x][start_y]);
+	unsigned long total_tiles = this->height * this->width;
+
+	while (creation_order.size() < total_tiles && i < creation_order.size()){
+		if( (creation_order[i])->seen == false){
+			(creation_order[i])->add_to_queue(&creation_order);
+		}
+		i++;
+	}
 	std::cout << "tile creation order found" << std::endl;
 	return creation_order;
 }

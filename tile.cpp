@@ -39,19 +39,23 @@ void tile::connect(tile* a, direction dir){
 	}
 }
 
-void tile::add_to_queue(std::queue<tile*> *queue){
+void tile::add_to_queue(std::vector<tile*> *queue){
 	if (this->seen == true){
 		return ;
 	}
-	queue->push(this);
 	this->seen = true;
 	std::vector<tile*>::iterator it = this->directions.begin();
 	while (it != this->directions.end()){
-		if (*it != NULL && (*it)->seen == false){
-			(*it)->add_to_queue(queue);
+		if (*it != NULL && (*it)->vectorContains(queue) == false){
+			queue->push_back(*it);
 		}
 		it++;
 	}
+}
+
+bool tile::vectorContains(const std::vector<tile*>* vector){
+	bool state = std::find(vector->begin(), vector->end(), this) != vector->end();
+	return state;
 }
 
 

@@ -12,8 +12,8 @@ class Map {
 		std::vector<std::vector<tile *>> map;
 		int width = 3;
 		int height = 3;
-		std::queue<tile*> create_tile_creation_order();
-		void add_tile(std::queue<tile*> creation_order, tile* aTile);
+		std::vector<tile*> create_tile_creation_order();
+		void add_tile(std::vector<tile*> creation_order, tile* aTile);
 
 	public:
 

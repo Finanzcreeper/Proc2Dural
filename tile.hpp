@@ -28,7 +28,7 @@ private:
 public:
 	bool seen = false;
 	void fill_directions();
-	void add_to_queue(std::queue<tile*> *queue);
+	void add_to_queue(std::vector<tile*> *queue);
 	void connect(tile* a, direction dir);
 	tile* left;
 	tile* up;
@@ -37,6 +37,7 @@ public:
 	std::vector<tile*> directions {up, down, left, right};
 	tiletype name;
 	void generate_connections();
+	bool vectorContains(const std::vector<tile*>* vector);
 	tile();
 	~tile();
 };
