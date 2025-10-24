@@ -3,6 +3,7 @@
 #include "random.hpp"
 #include <string>
 #include <vector>
+#include <queue>
 
 enum tiletype {
 	NONE,
