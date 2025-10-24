@@ -1,4 +1,5 @@
 #include "tile.hpp"
+#include <algorithm>
 
 void tile::fill_directions() {
 	this->directions[0] = this->up;
