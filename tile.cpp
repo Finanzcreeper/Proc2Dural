@@ -20,7 +20,42 @@ void tile::generate_connections()
 	}
 }
 
-tile::tile():left(NULL), right(NULL), up(NULL), down(NULL), name(NONE) {
+void tile::connect(tile* a, direction dir){
+	if (!a){
+		return ;
+	}
+	switch (dir){
+		case direction::up:
+			this->up = a;
+			a->down = this;
+			break;
+		case direction::left:
+			this->left = a;
+			a->right = this;
+			break;
+		default:
+			std::cout << "not defined connection" << std::endl;
+			break;
+	}
+}
+
+void tile::add_to_queue(std::queue<tile*> *queue){
+	if (this->seen == true){
+		return ;
+	}
+	queue->push(this);
+	this->seen = true;
+	std::vector<tile*>::iterator it = this->directions.begin();
+	while (it != this->directions.end()){
+		if (*it != NULL && (*it)->seen == false){
+			(*it)->add_to_queue(queue);
+		}
+		it++;
+	}
+}
+
+
+tile::tile():left(NULL), up(NULL), right(NULL), down(NULL), name(NONE) {
 }
 
 tile::~tile() {

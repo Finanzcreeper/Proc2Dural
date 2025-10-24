@@ -1,7 +1,7 @@
 CXX = g++
-CXXFLAGS = -g3
+CXXFLAGS = -g3 -Wall -Wextra -Werror
 
-SRC = tile.cpp main.cpp random.cpp connection_rules.cpp
+SRC = tile.cpp main.cpp random.cpp connection_rules.cpp map.cpp
 OBJ = $(SRC:.cpp=.o)
 
 NAME = gen

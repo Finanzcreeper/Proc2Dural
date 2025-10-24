@@ -42,13 +42,9 @@ bool edge_usable(tile* _tile) {
 	return (true);
 }
 
-void connect_edge(tile* _tile){
-
-}
-
 void plain_rules(tile _tile) {
 	std::vector<tiletype> allowed {PLAIN, RIVER, FOREST, ROAD};
-	int i = 0;
+	unsigned long i = 0;
 	while (i < _tile.directions.size()) {
 		if (edge_usable(_tile.directions[i]) != true) {
 			++i;
@@ -69,7 +65,7 @@ void plain_rules(tile _tile) {
 
 void river_rules(tile _tile) {
 	std::vector<tiletype> allowed {PLAIN, RIVER, FOREST};
-	int i = 0;
+	unsigned long i = 0;
 	while (i < _tile.directions.size()) {
 		if (edge_usable(_tile.directions[i]) != true) {
 			++i;
@@ -87,7 +83,7 @@ void river_rules(tile _tile) {
 
 void forest_rules(tile _tile) {
 	std::vector<tiletype> allowed {PLAIN, FOREST};
-	int i = 0;
+	unsigned long i = 0;
 	while (i < _tile.directions.size()) {
 		if (edge_usable(_tile.directions[i]) != true) {
 			++i;
@@ -101,7 +97,7 @@ void forest_rules(tile _tile) {
 
 void road_rules(tile _tile) {
 	std::vector<tiletype> allowed {PLAIN, FOREST, ROAD};
-	int i = 0;
+	unsigned long i = 0;
 	while (i < _tile.directions.size()) {
 		if (edge_usable(_tile.directions[i]) != true) {
 			++i;
