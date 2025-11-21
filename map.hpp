@@ -2,27 +2,30 @@
 #ifndef MAP_H
 # define MAP_H
 
-#include <string>
-#include <vector>
-#include <queue>
-#include "tile.hpp"
+	#include <string>
+	#include <vector>
+	#include <queue>
+	#include <stdexcept>
+	#include "tile.hpp"
+	#include "connection_rules.hpp"
 
-class Map {
-	private:
-		std::vector<std::vector<tile *>> map;
-		int width = 3;
-		int height = 3;
-		std::vector<tile*> create_tile_creation_order();
-		void add_tile(std::vector<tile*> creation_order, tile* aTile);
 
-	public:
+	class Map {
+		private:
+			std::vector<std::vector<tile>> map;
+			bool inBounds(int x, int y);
+			void addValidNeighbour(int x, int y, std::vector<tile*> &neighbours);
 
-		Map(int width, int height);
-		~Map();
-		void discover_tile_types();
-		void print_map();
+		public:
+			int width = 3; // x-value
+			int height = 3; // y-value
+			std::vector<tile*> getNeighbours(int x, int y);
+			tile *getTile(int x, int y);
+			Map(int width, int height);
+			~Map();
+			void print_map();
 
-};
+	};
 
 
 

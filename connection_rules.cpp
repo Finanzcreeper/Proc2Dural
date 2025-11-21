@@ -1,114 +1,61 @@
-#include "tile.hpp"
-#include "random.hpp"
 
+#include "connection_rules.hpp"
 
-void fill_tileset(std::vector<tiletype> &tileset) {
-	tileset.push_back(PLAIN);
-	tileset.push_back(RIVER);
-	tileset.push_back(FOREST);
-	tileset.push_back(ROAD);
+void initRules(){
+	ruleTable[(int) tiletype::PLAIN] = plainRules;
+	ruleTable[(int) tiletype::RIVER] = riverRules;
+	ruleTable[(int) tiletype::ROAD] = roadRules;
+	ruleTable[(int) tiletype::FOREST] = forestRules;
 }
 
-void link_tiles(tile _tile) {
-	switch (_tile.name) {
-	case PLAIN:
-		plain_rules(_tile);
-		break;
-	
-	case RIVER:
-		river_rules(_tile);
-		break;
-
-	case FOREST:
-		forest_rules(_tile);
-		break;
-
-	case ROAD:
-		road_rules(_tile);
-		break;
-	
-	default:
-		break;
+void randomlyAssignNeighbourstypes(Map* map, int x, int y, std::vector<tiletype> allowed){
+	std::vector<tile*> neighbours = map->getNeighbours(x, y);
+	std::vector<tile*>::iterator it;
+	for (it = neighbours.begin(); it != neighbours.end(); it++){
+		if ((*it)->type == NONE){
+			int next_type = flat_int_random(global_rng, 0, allowed.size() - 1);
+			(*it)->type = allowed[next_type];
+		}
 	}
 }
 
-bool edge_usable(tile* _tile) {
-	if (_tile == NULL) {
-		return (false);
+void pickRandomContinuingNeighbour(Map* map, int x, int y, tiletype continuingType){
+	std::vector<tile*> neighbours = map->getNeighbours(x, y);
+	std::vector<tile*>::iterator it;
+	bool hasNONE = false;
+	for (it = neighbours.begin(); it != neighbours.end(); it++){
+		if ((*it)->type == NONE){
+			hasNONE = true;
+			break;
+		}
 	}
-	if (_tile->name != NONE) {
-		return (false);
+	while (hasNONE){
+		int randomDirection = flat_int_random(global_rng, 0, neighbours.size() - 1);
+		if (neighbours[randomDirection]->type == NONE){
+			neighbours[randomDirection]->type = continuingType;
+			return;
+		}
 	}
-	return (true);
 }
 
-void plain_rules(tile _tile) {
+void plainRules(Map* map, int x, int y){
 	std::vector<tiletype> allowed {PLAIN, RIVER, FOREST, ROAD};
-	unsigned long i = 0;
-	while (i < _tile.directions.size()) {
-		if (edge_usable(_tile.directions[i]) != true) {
-			++i;
-			continue;
-		}
-		int next_tile = flat_int_random(global_rng, 0, allowed.size() - 1);
-		_tile.directions[i]->name = allowed[next_tile];
-
-		if (allowed[next_tile] == ROAD) {
-			allowed.erase(allowed.begin() + next_tile);
-		}
-		if (allowed[next_tile] == RIVER) {
-			allowed.erase(allowed.begin() + next_tile);
-		}
-		++i;
-	}
+	randomlyAssignNeighbourstypes(map, x, y, allowed);
 }
 
-void river_rules(tile _tile) {
-	std::vector<tiletype> allowed {PLAIN, RIVER, FOREST};
-	unsigned long i = 0;
-	while (i < _tile.directions.size()) {
-		if (edge_usable(_tile.directions[i]) != true) {
-			++i;
-			continue;
-		}
-		int next_tile = flat_int_random(global_rng, 0, allowed.size() - 1);
-		_tile.directions[i]->name = allowed[next_tile];
-
-		if (allowed[next_tile] == RIVER) {
-			allowed.erase(allowed.begin() + next_tile);
-		}
-		++i;
-	}
-}
-
-void forest_rules(tile _tile) {
+void riverRules(Map* map, int x, int y){
 	std::vector<tiletype> allowed {PLAIN, FOREST};
-	unsigned long i = 0;
-	while (i < _tile.directions.size()) {
-		if (edge_usable(_tile.directions[i]) != true) {
-			++i;
-			continue;
-		}
-		int next_tile = flat_int_random(global_rng, 0, allowed.size() - 1);
-		_tile.directions[i]->name = allowed[next_tile];
-		++i;
-	}
+	pickRandomContinuingNeighbour(map, x, y, RIVER);
+	randomlyAssignNeighbourstypes(map, x, y, allowed);
 }
 
-void road_rules(tile _tile) {
-	std::vector<tiletype> allowed {PLAIN, FOREST, ROAD};
-	unsigned long i = 0;
-	while (i < _tile.directions.size()) {
-		if (edge_usable(_tile.directions[i]) != true) {
-			++i;
-			continue;
-		}
-		int next_tile = flat_int_random(global_rng, 0, allowed.size() - 1);
-		_tile.directions[i]->name = allowed[next_tile];
+void forestRules(Map* map, int x, int y){
+	std::vector<tiletype> allowed {PLAIN, FOREST};
+	randomlyAssignNeighbourstypes(map, x, y, allowed);
+}
 
-		if (allowed[next_tile] == ROAD) {
-			allowed.erase(allowed.begin() + next_tile);
-		}
-		++i;
-	}
+void roadRules(Map* map, int x, int y){
+	std::vector<tiletype> allowed {PLAIN, FOREST};
+	pickRandomContinuingNeighbour(map, x, y, ROAD);
+	randomlyAssignNeighbourstypes(map, x, y, allowed);
 }
