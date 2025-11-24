@@ -6,7 +6,7 @@ void Map::addValidNeighbour(int x, int y, std::vector<tile*> &neighbours){
 	try {
 		neighbour = getTile(x, y);
 	}
-	catch(std::invalid_argument e){
+	catch(const std::invalid_argument& e){
 		std::cout << e.what() << std::endl;
 		return;
 	}
