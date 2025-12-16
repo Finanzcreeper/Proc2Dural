@@ -12,7 +12,8 @@ tiletype getRandomTiletype(std::vector<std::pair<tiletype, unsigned int>> tiles,
     int sum = 0;
     it = tiles.begin();
     while (it != tiles.end()){
-        if (random <= it->second){
+        sum += it->second; 
+        if (random <= sum){
             return it->first;
         }
         it++;
