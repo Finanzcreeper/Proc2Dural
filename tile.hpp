@@ -9,6 +9,7 @@ enum tiletype {
 	PLAIN,
 	RIVER,
 	FOREST,
+	FOREST_EDGE,
 	ROAD,
 	NONE
 };

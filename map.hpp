@@ -7,7 +7,7 @@
 	#include <queue>
 	#include <stdexcept>
 	#include "tile.hpp"
-	#include "connection_rules.hpp"
+	#include "connection-rules/connection_rules.hpp"
 
 
 	class Map {

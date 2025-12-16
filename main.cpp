@@ -1,5 +1,5 @@
 #include "map.hpp"
-#include "connection_rules.hpp"
+#include "connection-rules/connection_rules.hpp"
 #include <iostream>
 
 std::mt19937 global_rng = create_rng();
