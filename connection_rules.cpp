@@ -59,3 +59,4 @@ void roadRules(Map* map, int x, int y){
 	pickRandomContinuingNeighbour(map, x, y, ROAD);
 	randomlyAssignNeighbourstypes(map, x, y, allowed);
 }
+
